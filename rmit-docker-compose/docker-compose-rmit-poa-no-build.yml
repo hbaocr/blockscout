@@ -21,7 +21,9 @@ services:
         POSTGRES_HOST_AUTH_METHOD: 'trust'
     ports:
       - 7432:5432
-
+    volumes:
+      - './postgres-data:/var/lib/postgresql/data'
+      
   blockscout:
     depends_on:
       - db
@@ -37,18 +39,14 @@ services:
       - 'host.docker.internal:host-gateway'
     env_file:
       -  ./envs/rmit-poa.env
-    environment:
-        ETHEREUM_JSONRPC_VARIANT: 'geth'
-        ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:9545/
-        ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:9545/
-        INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER: 'true'
-        INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER: 'true'
-        DATABASE_URL: postgresql://postgres:@host.docker.internal:7432/blockscout?ssl=false
-        ECTO_USE_SSL: 'false'
-        #SECRET_KEY_BASE: '56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN'
-        CHAIN_ID: '202212'
+    # environment:
+    #     ETHEREUM_JSONRPC_VARIANT: 'geth'
+    #     ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:9545/
+    #     ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:9545/
+    #     INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER: 'true'
+    #     INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER: 'true'
+    #     CHAIN_ID: '202212'
     ports:
       - 4000:4000
     volumes:
       - ./logs/:/app/logs/
-
